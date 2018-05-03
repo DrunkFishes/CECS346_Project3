@@ -49,7 +49,6 @@ unsigned int on = 0;
 unsigned int off = 0; 
 unsigned int count = 0; 
 
-	Stepper_CW(0);
 int main(void){
 	
 	init_PortB();	
@@ -57,13 +56,19 @@ int main(void){
   Stepper_Init(160000);
 
 	// start off with green 
-	LIGHT = green; 
+	//LIGHT = green; 
 	
 
   while(1){
-	//Stepper_CW(0);			
+		
+	while (count == 1){
+		Stepper_CW(0);	
+		count = 0; 
+		}
 	}
 }
+
+
 void init_PortF(void){ 
 	volatile unsigned long delay;
   SYSCTL_RCGC2_R |= 0x00000020; // (a) activate clock for port F
@@ -103,7 +108,6 @@ void init_PortB(void){
 	NVIC_EN0_R = 0x00000002;      // (h) enable interrupt 2 in NVIC
 }
 
-
 void GPIOPortF_Handler(void){
 	
 	if ((GPIO_PORTF_RIS_R & 0x10)){ // sw1 is pressed
@@ -122,9 +126,8 @@ void GPIOPortB_Handler(void){
 }
 
 void SysTick_Handler(void){
-	
  
-		//Stepper_CW(0);
+		if(on){ count += 1;}
 
 }
 
