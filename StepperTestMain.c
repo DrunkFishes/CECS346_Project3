@@ -47,24 +47,36 @@ void init_PortB(void);
 
 unsigned int on = 0;
 unsigned int off = 0; 
-unsigned int count = 0; 
+unsigned int move = 0; 
 
 int main(void){
 	
 	init_PortB();	
 	init_PortF();
   Stepper_Init(160000);
-
+	Init_PortC  (160000);
 	// start off with green 
 	//LIGHT = green; 
 	
 
   while(1){
 		
-	while (count == 1){
-		Stepper_CW(0);	
-		count = 0; 
-		}
+		
+			if (move == 1){
+				
+				Stepper_CW(0);	
+				//Stepper_CW2(0);
+				move = 0; 
+				LIGHT = blue; 
+				}
+			if (move == 1){
+				
+				//Stepper_CW(0);	
+				//Stepper_CW2(0);
+				move = 0; 
+				LIGHT = blue; 
+				}
+
 	}
 }
 
@@ -127,7 +139,7 @@ void GPIOPortB_Handler(void){
 
 void SysTick_Handler(void){
  
-		if(on){ count += 1;}
+		if(on){ move += 1;}
 
 }
 

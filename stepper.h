@@ -34,6 +34,9 @@
 // Initialize Stepper interface
 void Stepper_Init(unsigned int i);
 
+// initialize the Stepper interface for Port C
+void	Init_PortC(unsigned int time);
+														
 // Move 1.8 degrees clockwise, 
 // delay is the time to wait after each step in bus cycles
 void Stepper_CW(uint32_t delay);
@@ -41,6 +44,14 @@ void Stepper_CW(uint32_t delay);
 // Move 1.8 degrees counterclockwise,
 // delay is the time to wait after each step in bus cycles
 void Stepper_CCW(uint32_t delay);
+
+// Move 1.8 degrees clockwise, 
+// delay is the time to wait after each step in bus cycles
+void Stepper_CW2(uint32_t delay);
+
+// Move 1.8 degrees counterclockwise,
+// delay is the time to wait after each step in bus cycles
+void Stepper_CCW2(uint32_t delay);
 
 // Turn stepper motor to desired position
 // (0 <= desired <= 199)
