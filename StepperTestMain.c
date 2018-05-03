@@ -49,6 +49,7 @@ unsigned int on = 0;
 unsigned int off = 0; 
 unsigned int count = 0; 
 
+	Stepper_CW(0);
 int main(void){
 	
 	init_PortB();	
@@ -63,8 +64,6 @@ int main(void){
 	//Stepper_CW(0);			
 	}
 }
-
-
 void init_PortF(void){ 
 	volatile unsigned long delay;
   SYSCTL_RCGC2_R |= 0x00000020; // (a) activate clock for port F
