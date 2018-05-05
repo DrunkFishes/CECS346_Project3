@@ -45,9 +45,13 @@ void init_PortB(void);
 #define green 0x08;
 #define blue  0x04;
 
-unsigned int on = 0;
-unsigned int off = 0; 
+unsigned int on, go = 0;
+unsigned int secondJob = 0;
+unsigned int leftTurn, rightTurn = 0; 
+unsigned int onGoing= 0 ; 
 unsigned int move = 0; 
+unsigned int count, count2 = 0; 
+unsigned int mult = 0;// count for both motors
 
 int main(void){
 	
@@ -55,30 +59,81 @@ int main(void){
 	init_PortF();
   Stepper_Init(160000);
 	Init_PortC  (160000);
-	// start off with green 
-	//LIGHT = green; 
 	
 
   while(1){
-		
-		
-			if (move == 1){
-				
-				Stepper_CW(0);	
-				//Stepper_CW2(0);
-				move = 0; 
-				LIGHT = blue; 
-				}
-			if (move == 1){
-				
-				//Stepper_CW(0);	
-				//Stepper_CW2(0);
-				move = 0; 
-				LIGHT = blue; 
-				}
 
-	}
+	if (on){ 
+		
+	if (mult <= 1000){ 
+
+		if (count < 20){
+			if (move == 1){
+							move = 0;
+							LIGHT = red; 
+							Stepper_CCW(0); 
+							mult += 1; 
+							}
+						}	
+		
+		 if ( 20 <= count  ){
+			
+				if (move == 1){
+						move = 0;
+						LIGHT = blue; 
+						Stepper_CW2(0); 
+							}
+						}
+				}
+	
+		if(secondJob){
+	
+				if (leftTurn <= 500){ 
+
+					if (count < 20){
+						if (move == 1){
+										move = 0;
+										LIGHT = green; 
+										Stepper_CCW(0); 
+										leftTurn += 1; 
+										}
+									}	
+					
+					 if ( 20 <= count  ){
+						
+							if (move == 1){
+									move = 0;
+									LIGHT = green; 
+									Stepper_CCW2(0); 
+										}
+									}
+							}
+						}
+			}
+/////////////////////////////////////////////		
+		if(onGoing){
+			
+		if (count < 20){
+			if (move == 1){
+							move = 0;
+							LIGHT = 0x0A; 
+							Stepper_CCW(0); 
+							mult += 1; 
+							}
+						}	
+		
+		 if ( 20 <= count  ){
+			
+				if (move == 1){
+						move = 0;
+						LIGHT = 0x0A; 
+						Stepper_CW2(0); 
+							}
+						}
+				}		
+		}
 }
+
 
 
 void init_PortF(void){ 
@@ -127,6 +182,7 @@ void GPIOPortF_Handler(void){
 		
 		on = 1; 
 
+
 	}
 }
 
@@ -134,12 +190,27 @@ void GPIOPortB_Handler(void){
 		
 	GPIO_PORTB_ICR_R = 0x01; // acknologe PB0 
 	
-
 }
 
 void SysTick_Handler(void){
  
-		if(on){ move += 1;}
+		if(on){ 
+			move = 1; 
+			count += 1; 
+		}
+		if (mult == 1000){
+			secondJob = 1; 
+		}
+		
+		if (leftTurn == 500){
+			onGoing = 1; 
+			
+		}
+		
+		if(count == 40){
+			count = 0; 
+
+		}
 
 }
 

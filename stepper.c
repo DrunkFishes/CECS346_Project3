@@ -34,8 +34,6 @@
 #include "tm4c123gh6pm.h"
 #include "systick.h"
 
-//unsigned int count = 0; 
-
 struct State{
   uint8_t Out;     // Output
   uint8_t Next[2]; // CW/CCW
@@ -60,17 +58,49 @@ StateType fsm2[4]={
   {0x30,{3,1}},
   {0x10,{0,2}}
 };
+/*
+/////////////////////////////////////////////
+
+struct State2{
+  uint8_t Out;     // Output
+	uint8_t Out2; //second output
+  uint8_t Next[2]; // CW/CCW
+};
+
+typedef const struct State2 StateType2;
+
+
+StateType2 fsm3[4]={
+  {0xC0,0x0C,{1,3}}, 
+  {0x60,0x06,{2,0}},
+  {0x30,0x03,{3,1}},
+  {0x10,0x01,{0,2}}
+};
+
+*/
+//////////////////////////////////////////////
+
+
 unsigned char s; // current state
 
 #define STEPPER  (*((volatile uint32_t *)0x4000703C))
 #define STEPPER2 (*((volatile uint32_t *)0x400063C0))
 	
+/*
+void trying(uint32_t delay){
+  s = fsm[s].Next[clockwise]; // clock wise circular
+  STEPPER = fsm3[s].Out; // step motor
+	STEPPER2 = fsm3[s].Out2; 
+
+}
+*/
 // Move 1.8 degrees clockwise, delay is the time to wait after each step
 void Stepper_CW(uint32_t delay){
   s = fsm[s].Next[clockwise]; // clock wise circular
   STEPPER = fsm[s].Out; // step motor
 
 }
+
 // Move 1.8 degrees counterclockwise, delay is wait after each step
 void Stepper_CCW(uint32_t delay){
   s = fsm[s].Next[counterclockwise]; // counter clock wise circular
@@ -108,7 +138,7 @@ void Stepper_Init(unsigned int time){
   GPIO_PORTD_DR8R_R |= 0x0F;  // enable 8 mA drive
   GPIO_PORTD_DEN_R |= 0x0F;   // 7) enable digital I/O on PD3-0 
 }
-//TODO: test port C by hard coding, instead of using the FSM
+
 
 // Initialize Stepper interface for port C
 void	Init_PortC(unsigned int time){ //1111.0000
